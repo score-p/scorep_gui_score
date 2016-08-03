@@ -277,7 +277,8 @@ SCOREP_Score_Estimator::SCOREP_Score_Estimator( std::string fileName,
 {
     m_dense_num = denseNum;
     SCOREP_Score_Profile* profile;
-    try{
+    try
+    {
         profile = new SCOREP_Score_Profile( fileName );
     }
     catch ( ... )

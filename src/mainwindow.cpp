@@ -255,7 +255,7 @@ MainWindow::changeState()
     }
     if ( !mp_connection->changeState( keys, groupTable ) )
     {
-        mp_statusBar->showMessage( type + " can´t be excluded" );
+        mp_statusBar->showMessage( type + " cannot be excluded" );
     }
     else
     {
@@ -273,7 +273,7 @@ MainWindow::openFile()
     /* reset all*/
     /*----------------------------------------------------------------------------------------------------------------*/
     QString fileName;
-    fileName = QFileDialog::getOpenFileName( this, tr( "open profile" ), QDir::homePath(), tr( "Profile files (*.cubex)" ) );
+    fileName = QFileDialog::getOpenFileName( this, tr( "Open profile" ), QDir::homePath(), tr( "Profile files (*.cubex)" ) );
     /*get directory*/
     if ( fileName != 0 )
     {
@@ -295,7 +295,7 @@ MainWindow::saveFile()
         if ( m_filterFileName.isEmpty() )
         {
             QString saveFileName;
-            saveFileName = QFileDialog::getSaveFileName( this, tr( "save filter file" ), QDir::homePath(), tr( "Filter files (*.filter)" ) );
+            saveFileName = QFileDialog::getSaveFileName( this, tr( "Save filter file" ), QDir::homePath(), tr( "Filter files (*.filter)" ) );
             if ( saveFileName.isEmpty() )
             {
                 return;
@@ -307,24 +307,24 @@ MainWindow::saveFile()
             m_filterFileName = saveFileName;
             if ( mp_connection->createFilterFile( saveFileName ) )
             {
-                mp_statusBar->showMessage( "Filterfile saved at " + saveFileName );
+                mp_statusBar->showMessage( "Filter file saved at " + saveFileName );
                 m_changed = false;
             }
             else
             {
-                mp_statusBar->showMessage( "Saving Filterfile failed. No Permissions" );
+                mp_statusBar->showMessage( "Saving filterfile failed. No Permissions" );
             }
         }
         else
         {
             if ( mp_connection->createFilterFile( m_filterFileName ) )
             {
-                mp_statusBar->showMessage( "Filterfile saved at " + m_filterFileName );
+                mp_statusBar->showMessage( "Filter file saved at " + m_filterFileName );
                 m_changed = false;
             }
             else
             {
-                mp_statusBar->showMessage( "Saving Filterfile failed. No Permissions" );
+                mp_statusBar->showMessage( "Saving filter file failed. No Permissions" );
             }
         }
     }
@@ -344,7 +344,7 @@ MainWindow::saveFileAs()
     if ( mp_connection->hasFiltered() )
     {
         QString saveFileName;
-        saveFileName = QFileDialog::getSaveFileName( this, tr( "save filter file" ), QDir::homePath(), tr( "Filter files (*.filter)" ) );
+        saveFileName = QFileDialog::getSaveFileName( this, tr( "Save filter file" ), QDir::homePath(), tr( "Filter files (*.filter)" ) );
         if ( saveFileName == "" )
         {
             return;
@@ -356,12 +356,12 @@ MainWindow::saveFileAs()
         m_filterFileName = saveFileName;
         if ( mp_connection->createFilterFile( saveFileName ) )
         {
-            mp_statusBar->showMessage( "Filterfile saved at " + saveFileName );
+            mp_statusBar->showMessage( "Filter file saved at " + saveFileName );
             m_changed = false;
         }
         else
         {
-            mp_statusBar->showMessage( "Saving Filterfile failed. No Permissions" );
+            mp_statusBar->showMessage( "Saving filter file failed. No Permissions" );
         }
     }
     else

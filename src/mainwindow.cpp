@@ -278,8 +278,7 @@ MainWindow::openFile()
     if ( fileName != 0 )
     {
         reset();
-        this->setWindowTitle( "scoreQt " + fileName );
-        m_windowTitle = "scoreQt " + fileName;
+        m_windowTitle = "Score-P scoring GUI: " + fileName;
         m_fileName    = fileName;
         mp_connection->start( fileName );
         mp_groupTable->selectRow( 0 );

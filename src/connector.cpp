@@ -418,7 +418,7 @@ Connector::createFilterFile( QString fileName )
         QFile file( fileName );
         ret = file.open( QIODevice::WriteOnly );
         QTextStream stream( &file );
-        stream << "#this file is generated bei scoreQt" << endl;
+        stream << "#this file is generated bei scorep-score-gui" << endl;
         stream << "SCOREP_REGION_NAMES_BEGIN" << endl;
         stream << "EXCLUDE MANGLED" << endl;
         for ( int i = 0; i < m_excludedFunctions.size(); i++ )

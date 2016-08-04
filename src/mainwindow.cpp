@@ -288,7 +288,7 @@ MainWindow::openFile()
     /* reset all*/
     /*----------------------------------------------------------------------------------------------------------------*/
     QString fileName;
-    fileName = QFileDialog::getOpenFileName( this, tr( "Open profile" ), QDir::homePath(), tr( "Profile files (*.cubex)" ) );
+    fileName = QFileDialog::getOpenFileName( this, tr( "Open profile" ), QDir::currentPath(), tr( "Profile files (*.cubex)" ) );
     /*get directory*/
     if ( fileName != 0 )
     {
@@ -310,7 +310,7 @@ MainWindow::saveFile()
         if ( m_filterFileName.isEmpty() )
         {
             QString saveFileName;
-            saveFileName = QFileDialog::getSaveFileName( this, tr( "Save filter file" ), QDir::homePath(), tr( "Filter files (*.filter)" ) );
+            saveFileName = QFileDialog::getSaveFileName( this, tr( "Save filter file" ), QDir::currentPath(), tr( "Filter files (*.filter)" ) );
             if ( saveFileName.isEmpty() )
             {
                 return;
@@ -357,7 +357,7 @@ MainWindow::saveFileAs()
     if ( mp_connection->hasFiltered() )
     {
         QString saveFileName;
-        saveFileName = QFileDialog::getSaveFileName( this, tr( "Save filter file" ), QDir::homePath(), tr( "Filter files (*.filter)" ) );
+        saveFileName = QFileDialog::getSaveFileName( this, tr( "Save filter file" ), QDir::currentPath(), tr( "Filter files (*.filter)" ) );
         if ( saveFileName == "" )
         {
             return;

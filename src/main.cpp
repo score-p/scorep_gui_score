@@ -36,7 +36,6 @@ main( int argc, char* argv[] )
     w.show();
     if ( argc != 1 )
     {
-        w.setWindowTitle( argv[ 1 ] );
         w.initOpen( argv[ 1 ] );
     }
 

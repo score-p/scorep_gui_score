@@ -76,7 +76,6 @@ private:
     QString m_fileName;
     QString m_filterFileName;
     QString m_windowTitle;
-    bool    m_changed;
 
     /*functions*/
     void

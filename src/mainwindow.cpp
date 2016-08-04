@@ -25,8 +25,9 @@ MainWindow::MainWindow( QWidget* parent )
     , mp_prototypeNumberItem( 0 )
     , mp_prototypeTextItem( 0 )
     , mp_signalMapper( 0 )
-    , m_changed( false )
 {
+    m_windowTitle = "Score-P scoring GUI";
+
     /*signal mapper to determine the position of a clicked checkbox*/
     mp_signalMapper = new QSignalMapper( this );
 
@@ -67,10 +68,11 @@ MainWindow::MainWindow( QWidget* parent )
              this, SLOT( resizeFunctionTable( int, int, int ) ) );
     connect( mp_signalMapper, SIGNAL( mapped( int ) ), this, SLOT( changeStateSlot( int ) ) );
 
-    mp_connection = new Connector();
     mp_groupTable->installEventFilter( this );
     mp_functionTable->installEventFilter( this );
     mp_sizeTable->installEventFilter( this );
+
+    reset();
 }
 
 void
@@ -209,7 +211,7 @@ MainWindow::changeStateSlot( int pos )
     }
     keys.append( pos );
     mp_connection->changeState( keys, groupTable );
-    m_changed = true;
+    setWindowModified( true );
     update();
 }
 
@@ -271,7 +273,7 @@ MainWindow::changeState()
     }
     else
     {
-        m_changed = true;
+        setWindowModified( true );
     }
     update();
 }
@@ -290,8 +292,8 @@ MainWindow::openFile()
     if ( fileName != 0 )
     {
         reset();
-        m_windowTitle = "Score-P scoring GUI: " + fileName;
-        m_fileName    = fileName;
+        m_fileName = fileName;
+        setWindowTitle( m_fileName + "[*] - " + m_windowTitle );
         mp_connection->start( fileName );
         mp_groupTable->selectRow( 0 );
         update();
@@ -320,7 +322,7 @@ MainWindow::saveFile()
             if ( mp_connection->createFilterFile( saveFileName ) )
             {
                 mp_statusBar->showMessage( "Filter file saved at " + saveFileName );
-                m_changed = false;
+                setWindowModified( false );
             }
             else
             {
@@ -332,7 +334,7 @@ MainWindow::saveFile()
             if ( mp_connection->createFilterFile( m_filterFileName ) )
             {
                 mp_statusBar->showMessage( "Filter file saved at " + m_filterFileName );
-                m_changed = false;
+                setWindowModified( false );
             }
             else
             {
@@ -369,7 +371,7 @@ MainWindow::saveFileAs()
         if ( mp_connection->createFilterFile( saveFileName ) )
         {
             mp_statusBar->showMessage( "Filter file saved at " + saveFileName );
-            m_changed = false;
+            setWindowModified( false );
         }
         else
         {
@@ -389,6 +391,7 @@ MainWindow::initOpen( QString fileName )
     if ( fileName.endsWith( ".cubex" ) )
     {
         m_fileName = fileName;
+        setWindowTitle( m_fileName + "[*] - " + m_windowTitle );
         mp_connection->start( fileName );
         mp_groupTable->selectRow( 0 );
         update();
@@ -426,14 +429,6 @@ MainWindow::update()
     QList<dataCenter::groupData> tempGroups;
     QVector<int>                 maxWidth;
 
-    if ( m_changed )
-    {
-        setWindowTitle( "*" + m_windowTitle );
-    }
-    else
-    {
-        setWindowTitle( m_windowTitle );
-    }
     /*get data from Connector*/
     tempSizes     = mp_connection->getSizes();
     tempFunctions = mp_connection->getFunctionData();
@@ -793,7 +788,12 @@ MainWindow::resizeFunctionTable( int index, int oldSize, int newSize )
 void
 MainWindow::reset()
 {
-    delete mp_connection;
+    setWindowModified( false );
+    setWindowTitle( m_windowTitle );
+    if ( mp_connection )
+    {
+        delete mp_connection;
+    }
     mp_connection = new Connector();
     mp_groupTable->clearContents();
     mp_sizeTable->clearContents();

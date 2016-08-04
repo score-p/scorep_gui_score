@@ -6,7 +6,10 @@ GUI for scoring experiments recorded with Score-P.
 Building
 ========
 
-Building needs a recent [Cube] writer library (+4.3) and 'cube-config' in `PATH`.
+Building needs the following packages:
+
+ - Qt 5.5
+ - [Cube] 4.3 writer library and 'cube-config' in `PATH`
 
 Running
 =======

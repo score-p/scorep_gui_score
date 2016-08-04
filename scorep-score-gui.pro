@@ -10,9 +10,15 @@
 ##
 ##
 
-QT += core gui
+lessThan(QT_MAJOR_VERSION, 5) {
+    error("Insufficient version of Qt. Need at least version 5.5")
+} else {
+    lessThan(QT_MINOR_VERSION, 5) {
+        error("Insufficient version of Qt. Need at least version 5.5")
+    }
+}
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT += core gui widgets
 
 TARGET = scorep-score-gui
 TEMPLATE = app

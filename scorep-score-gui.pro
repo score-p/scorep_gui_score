@@ -22,6 +22,8 @@ QT += core gui widgets
 
 TARGET = scorep-score-gui
 TEMPLATE = app
+# the dash separates the version from the package name
+VERSION = -1
 
 CONFIG += warn_on debug_and_release
 !win32:CONFIG += silent

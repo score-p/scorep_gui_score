@@ -1,6 +1,7 @@
-Makefile
-Makefile.Debug
-Makefile.Release
-debug
-release
-scorep-score-gui
+/Makefile
+/Makefile.Debug
+/Makefile.Release
+/debug
+/release
+/scorep-score-gui
+/scorep-score-gui-*.tar.gz

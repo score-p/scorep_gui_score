@@ -46,7 +46,7 @@ MainWindow::MainWindow( QWidget* parent )
     /*new QWidget to set Layout*/
     QWidget* window = new QWidget();
     window->setLayout( mp_layout );
-    this->setCentralWidget( window );
+    setCentralWidget( window );
 
     /*do connections*/
     connect( mp_groupTable, SIGNAL( cellPressed( int, int ) ), this, SLOT( unselectFunctionTable() ) );
@@ -416,11 +416,11 @@ MainWindow::update()
 
     if ( m_changed )
     {
-        this->setWindowTitle( "*" + m_windowTitle );
+        setWindowTitle( "*" + m_windowTitle );
     }
     else
     {
-        this->setWindowTitle( m_windowTitle );
+        setWindowTitle( m_windowTitle );
     }
     /*get data from Connector*/
     tempSizes     = mp_connection->getSizes();

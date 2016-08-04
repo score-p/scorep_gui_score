@@ -13,7 +13,19 @@
 #include "mainwindow.hpp"
 
 MainWindow::MainWindow( QWidget* parent )
-    : QMainWindow( parent ), m_changed( false )
+    : QMainWindow( parent )
+    , mp_layout( 0 )
+    , mp_sizeTable( 0 )
+    , mp_groupTable( 0 )
+    , mp_functionTable( 0 )
+    , mp_statusBar( 0 )
+    , mp_menu( 0 )
+    , mp_progressbar( 0 )
+    , mp_connection( 0 )
+    , mp_prototypeNumberItem( 0 )
+    , mp_prototypeTextItem( 0 )
+    , mp_signalMapper( 0 )
+    , m_changed( false )
 {
     /*signal mapper to determine the position of a clicked checkbox*/
     mp_signalMapper = new QSignalMapper( this );

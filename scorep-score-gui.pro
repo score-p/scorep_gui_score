@@ -59,3 +59,9 @@ DISTFILES += images/save.png \
              COPYING
 
 RESOURCES += src.qrc
+
+# Uncrustify Setting. add custom build target: use 'make beautify'
+beautify.target = beautify
+beautify.commands = @cd $$PWD; list=$$escape_expand(\')$$HEADERS $$SOURCES$$escape_expand(\'); $$escape_expand(\\)$$escape_expand(\n\t)for f in $$escape_expand(\$\$)list; do $$escape_expand(\\)$$escape_expand(\n\t\t)echo beautifying $$escape_expand(\$\$)f && $$escape_expand(\\)$$escape_expand(\n\t\t)uncrustify -c beautify.cfg --no-backup -q $$escape_expand(\$\$)f || $$escape_expand(\\)$$escape_expand(\n\t\t)break; $$escape_expand(\\)$$escape_expand(\n\t)done
+QMAKE_EXTRA_TARGETS += beautify
+DISTFILES += beautify.cfg

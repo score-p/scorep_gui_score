@@ -10,15 +10,8 @@
 ##
 ##
 
-lessThan(QT_MAJOR_VERSION, 5) {
-    error("Insufficient version of Qt. Need at least version 5.5")
-} else {
-    lessThan(QT_MINOR_VERSION, 5) {
-        error("Insufficient version of Qt. Need at least version 5.5")
-    }
-}
-
-QT += core gui widgets
+QT += core gui
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = scorep-score-gui
 TEMPLATE = app
@@ -64,6 +57,6 @@ RESOURCES += src.qrc
 
 # Uncrustify Setting. add custom build target: use 'make beautify'
 beautify.target = beautify
-beautify.commands = @cd $$PWD; list=$$escape_expand(\')$$HEADERS $$SOURCES$$escape_expand(\'); $$escape_expand(\\)$$escape_expand(\n\t)for f in $$escape_expand(\$\$)list; do $$escape_expand(\\)$$escape_expand(\n\t\t)echo beautifying $$escape_expand(\$\$)f && $$escape_expand(\\)$$escape_expand(\n\t\t)uncrustify -c beautify.cfg --no-backup -q $$escape_expand(\$\$)f || $$escape_expand(\\)$$escape_expand(\n\t\t)break; $$escape_expand(\\)$$escape_expand(\n\t)done
+beautify.commands = @cd $$PWD; $$escape_expand(\\)$$escape_expand(\\n\\t)list=$$escape_expand(\')$$HEADERS $$SOURCES$$escape_expand(\'); $$escape_expand(\\)$$escape_expand(\\n\\t)for f in $$escape_expand(\$\$)list; do $$escape_expand(\\)$$escape_expand(\\n\\t) echo beautifying $$escape_expand(\$\$)f && $$escape_expand(\\)$$escape_expand(\\n\\t) uncrustify -c beautify.cfg --no-backup -q $$escape_expand(\$\$)f || $$escape_expand(\\)$$escape_expand(\\n\\t) exit 1; $$escape_expand(\\)$$escape_expand(\\n\\t)done
 QMAKE_EXTRA_TARGETS += beautify
 DISTFILES += beautify.cfg

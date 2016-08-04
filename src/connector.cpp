@@ -48,6 +48,7 @@ Connector::start( QString fileName )
     dataCenter::groupData temp;
     temp.type         = "FLT";
     temp.state        = dataCenter::EXCLUDED;
+    temp.key          = m_dataListGroup.size();
     temp.maxBuf       = 0;
     temp.timeP        = 0;
     temp.visits       = 0;
@@ -158,6 +159,7 @@ Connector::getReadableByteNo( uint64_t bytes )
 bool
 Connector::changeState( QList<int> keys, bool groupTable )
 {
+    /*instead of rows ->keys*/
     /*return type QString for error messages*/
     bool               ret = true;
     QListIterator<int> it( keys );
@@ -441,6 +443,7 @@ Connector::calculateFilteredSizes()
     while ( it.hasNext() )
     {
         it.next();
+        /*check state, only calculate included*/
         included = true;
         for ( int i = 0; i < m_excludedFunctions.size(); i++ )
         {
@@ -451,6 +454,7 @@ Connector::calculateFilteredSizes()
         }
         if ( included )
         {
+            /*iterate through processes of this function*/
             QHashIterator<int, dataCenter::buffer> innerIt( it.value() );
             while ( innerIt.hasNext() )
             {

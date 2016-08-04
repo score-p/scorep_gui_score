@@ -32,7 +32,7 @@ MainWindow::MainWindow( QWidget* parent )
     mp_signalMapper = new QSignalMapper( this );
 
     /*init layout*/
-    mp_layout = new QVBoxLayout( parent );
+    mp_layout = new QVBoxLayout( this );
     m_noFilter << "MPI" << "ALL" << "OMP" << "SHMEM";
 
     /*init*/
@@ -212,7 +212,7 @@ MainWindow::changeStateSlot( int pos )
     keys.append( pos );
     mp_connection->changeState( keys, groupTable );
     setWindowModified( true );
-    update();
+    updateTables();
 }
 
 void
@@ -239,6 +239,7 @@ MainWindow::changeState()
         selection  = mp_groupTable->selectionModel()->selectedRows();
         groupTable = true;
     }
+
     for ( int i = 0; i < selection.count(); i++ )
     {
         QModelIndex index = selection.at( i );
@@ -275,7 +276,7 @@ MainWindow::changeState()
     {
         setWindowModified( true );
     }
-    update();
+    updateTables();
 }
 
 
@@ -346,15 +347,13 @@ MainWindow::saveFile()
     {
         mp_statusBar->showMessage( "Error: No functions to filter" );
     }
-    update();
+    updateTables();
 }
 
 void
 MainWindow::saveFileAs()
 {
-    qDebug() << "as";
     mp_statusBar->clearMessage();
-    qDebug() << mp_connection->hasFiltered();
     if ( mp_connection->hasFiltered() )
     {
         QString saveFileName;
@@ -382,7 +381,7 @@ MainWindow::saveFileAs()
     {
         mp_statusBar->showMessage( "Error: No functions to filter" );
     }
-    update();
+    updateTables();
 }
 
 void
@@ -394,11 +393,12 @@ MainWindow::initOpen( QString fileName )
         setWindowTitle( m_fileName + "[*] - " + m_windowTitle );
         mp_connection->start( fileName );
         mp_groupTable->selectRow( 0 );
-        update();
+        updateTables();
     }
     else
     {
         mp_statusBar->showMessage( "Error: Given file isn't a .cubex file" );
+        updateTables();
     }
 }
 
@@ -415,7 +415,7 @@ MainWindow::unselectGroupTable()
 }
 
 void
-MainWindow::update()
+MainWindow::updateTables()
 {
     if ( m_fileName.isEmpty() )
     {
@@ -445,49 +445,7 @@ MainWindow::update()
     {
         mp_progressbar->setValue( tempSizes.traceSize );
     }
-    /*create checkboxes if needed*/
-    if ( m_functionBoxes.size() == 0 )
-    {
-        for ( int i = 0; i < tempFunctions.size(); i++ )
-        {
-            m_functionBoxes.append( new QCheckBox() );
-            m_functionBoxes.at( i )->installEventFilter( this );
-            if ( m_noFilter.contains( QString::fromStdString( tempFunctions[ i ].type ) ) )
-            {
-                m_functionBoxes.at( i )->setEnabled( false );
-            }
-            else
-            {
-                m_functionBoxes.at( i )->setChecked( true );
-            }
-            mp_signalMapper->setMapping( m_functionBoxes.at( i ), i + tempGroups.size() );
-            connect( m_functionBoxes.at( i ), SIGNAL( clicked( bool ) ), mp_signalMapper, SLOT( map() ) );
-        }
-    }
-    if ( m_groupBoxes.size() == 0 )
-    {
-        for ( int i = 0; i < tempGroups.size(); i++ )
-        {
-            m_groupBoxes.append( new QCheckBox() );
-            m_groupBoxes.at( i )->installEventFilter( this );
-            if ( m_noFilter.contains( QString::fromStdString( tempGroups[ i ].type ) ) )
-            {
-                m_groupBoxes.at( i )->setEnabled( false );
-            }
-            else if ( QString::fromStdString( tempGroups[ i ].type ) == "FLT" )
-            {
-                m_groupBoxes.at( i )->setChecked( false );
-                m_groupBoxes[ i ]->setTristate( true );
-            }
-            else
-            {
-                m_groupBoxes.at( i )->setChecked( true );
-                m_groupBoxes[ i ]->setTristate( true );
-            }
-            mp_signalMapper->setMapping( m_groupBoxes.at( i ), i );
-            connect( m_groupBoxes.at( i ), SIGNAL( clicked( bool ) ), mp_signalMapper, SLOT( map() ) );
-        }
-    }
+
     mp_functionTable->setRowCount( tempFunctions.size() );
     mp_groupTable->setRowCount( tempGroups.size() );
 
@@ -512,22 +470,29 @@ MainWindow::update()
 
     for ( int i = 0; i < tempGroups.size(); i++ )
     {
-        if ( tempGroups[ i ].state == dataCenter::PARTIAL )
-        {
-            m_groupBoxes[ i ]->setCheckState( Qt::PartiallyChecked );
-        }
-        else if ( tempGroups[ i ].state == dataCenter::INCLUDED )
-        {
-            m_groupBoxes[ i ]->setCheckState( Qt::Checked );
-        }
-        else
-        {
-            m_groupBoxes[ i ]->setCheckState( Qt::Unchecked );
-        }
-
+        int checkboxWidth = 0;
         if ( !m_noFilter.contains( QString::fromStdString( tempGroups[ i ].type ) ) )
         {
-            mp_groupTable->setCellWidget( i, 0, m_groupBoxes[ i ] );
+            QCheckBox* tempBox = new QCheckBox( this );
+            tempBox->installEventFilter( this );
+            mp_groupTable->setCellWidget( i, 0, tempBox );
+            checkboxWidth = tempBox->width();
+            mp_signalMapper->setMapping( tempBox, i );
+            connect( tempBox, SIGNAL( clicked( bool ) ), mp_signalMapper, SLOT( map() ) );
+            if ( tempGroups[ i ].state == dataCenter::PARTIAL )
+            {
+                tempBox->setCheckState( Qt::PartiallyChecked );
+            }
+            else if ( tempGroups[ i ].state == dataCenter::INCLUDED )
+            {
+                tempBox->setCheckState( Qt::Checked );
+                tempBox->setChecked( true );
+            }
+            else
+            {
+                tempBox->setCheckState( Qt::Unchecked );
+                tempBox->setChecked( false );
+            }
         }
         mp_groupTable->setItem( i, 1, mp_prototypeTextItem->clone() );
         mp_groupTable->setItem( i, 2, mp_prototypeNumberItem->clone() );
@@ -543,7 +508,7 @@ MainWindow::update()
         mp_groupTable->item( i, 5 )->setText( QString::number( tempGroups[ i ].timeP, 'f', 2 ) );
         mp_groupTable->item( i, 6 )->setText( QString::number( tempGroups[ i ].timePerVisit, 'f', 2 ) );
         mp_groupTable->item( i, 7 )->setText( QString::fromStdString( tempGroups[ i ].region ) );
-        maxWidth[ 0 ] = qMax( maxWidth[ 0 ], m_groupBoxes[ i ]->width() );
+        maxWidth[ 0 ] = qMax( maxWidth[ 0 ], checkboxWidth + 4 );
         maxWidth[ 1 ] = qMax( maxWidth[ 1 ], fm.width( QString::fromStdString( tempGroups[ i ].type ) ) );
         maxWidth[ 2 ] = qMax( maxWidth[ 2 ], fm.width( seperate( tempGroups[ i ].maxBuf ) ) );
         maxWidth[ 3 ] = qMax( maxWidth[ 3 ], fm.width( seperate( tempGroups[ i ].visits ) ) );
@@ -560,17 +525,21 @@ MainWindow::update()
     /*functionTable*/
     for ( int i = 0; i < tempFunctions.size(); i++ )
     {
-        if ( tempFunctions[ i ].included )
-        {
-            m_functionBoxes[ i ]->setChecked( true );
-        }
-        else
-        {
-            m_functionBoxes[ i ]->setChecked( false );
-        }
         if ( !m_noFilter.contains( QString::fromStdString( tempFunctions[ i ].type ) ) )
         {
-            mp_functionTable->setCellWidget( i, 0, m_functionBoxes.at( i ) );
+            QCheckBox* tempBox = new QCheckBox( this );
+            tempBox->installEventFilter( this );
+            mp_functionTable->setCellWidget( i, 0, tempBox );
+            mp_signalMapper->setMapping( tempBox, i + tempGroups.size() );
+            connect( tempBox, SIGNAL( clicked( bool ) ), mp_signalMapper, SLOT( map() ) );
+            if ( tempFunctions[ i ].included )
+            {
+                tempBox->setChecked( true );
+            }
+            else
+            {
+                tempBox->setChecked( false );
+            }
         }
         mp_functionTable->setItem( i, 1, mp_prototypeTextItem->clone() );
         mp_functionTable->setItem( i, 2, mp_prototypeNumberItem->clone() );
@@ -579,7 +548,7 @@ MainWindow::update()
         mp_functionTable->setItem( i, 5, mp_prototypeNumberItem->clone() );
         mp_functionTable->setItem( i, 6, mp_prototypeNumberItem->clone() );
         mp_functionTable->setItem( i, 7, mp_prototypeTextItem->clone() );
-        mp_functionTable->item( i, 1 )->setText( ( QString::fromStdString( tempFunctions[ i ].type ) ) );
+        mp_functionTable->item( i, 1 )->setText( QString::fromStdString( tempFunctions[ i ].type ) );
         mp_functionTable->item( i, 2 )->setText( seperate( tempFunctions[ i ].maxBuf ) );
         mp_functionTable->item( i, 3 )->setText( seperate( tempFunctions[ i ].visits ) );
         mp_functionTable->item( i, 4 )->setText( QString::number( tempFunctions[ i ].timeS, 'f', 2 ) );
@@ -633,6 +602,8 @@ MainWindow::update()
         mp_sizeTable->setItem( 1, 2, new QTableWidgetItem( "" ) );
         mp_sizeTable->setItem( 2, 2, new QTableWidgetItem( "" ) );
     }
+    //mp_groupTable->setSortingEnabled(true);
+    //mp_functionTable->setSortingEnabled(true);
 }
 
 QString
@@ -759,9 +730,6 @@ MainWindow::eventFilter( QObject* object, QEvent* event )
             }
         }
     }
-    if ( event->type() == QEvent::Resize )
-    {
-    }
     return ret;
 }
 
@@ -800,36 +768,4 @@ MainWindow::reset()
     fillSizeTable();
     mp_functionTable->clearContents();
     mp_progressbar->reset();
-    m_groupBoxes.clear();
-    m_functionBoxes.clear();
-}
-
-int
-MainWindow:: checkEstimator()
-{
-    QProcess process;
-
-    process.start( "otf2_estimator" );
-
-    // Wait for it to start
-    if ( !process.waitForStarted( 100 ) )
-    {
-        return 0;
-    }
-
-    bool       retval = false;
-    QByteArray buffer;
-    while ( ( retval = process.waitForFinished() ) )
-    {
-        buffer.append( process.readAll() );
-    }
-
-    if ( !retval )
-    {
-        qDebug() << "Process 2 error:" << process.errorString();
-        qDebug() << buffer;
-        return 1;
-    }
-
-    return 0;
 }

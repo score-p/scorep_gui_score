@@ -54,7 +54,6 @@ public:
     getReadableByteNo( uint64_t bytes );
 
 private:
-
     QHash<QString, QHash<int, dataCenter::buffer> > m_bufferData;//QHash<functionName, QHash<procNr, buffer> >
     QList<int>                                      m_excludedFunctions;
     QList<dataCenter::groupData>                    m_dataListGroup;

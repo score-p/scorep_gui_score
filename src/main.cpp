@@ -12,9 +12,7 @@
 
 #include "mainwindow.hpp"
 #include <QApplication>
-#include <QStyle>
 #include <QFontDatabase>
-#include <QStyleFactory>
 
 int
 main( int argc, char* argv[] )
@@ -27,11 +25,8 @@ main( int argc, char* argv[] )
        if(fontId != -1) {
         QFont f("myFont");
         a.setFont(f);
-       }
-       qDebug() << w.checkEstimator();*/
-    qDebug() << QStyleFactory::keys().join( "" );
+       }*/
     a.setFont( def );
-    a.setStyle( "Fusion" );
     /*first check if link is set*/
     w.show();
     if ( argc != 1 )

@@ -46,22 +46,19 @@ class MainWindow : public QMainWindow
 public:
     MainWindow( QWidget* parent = 0 );
     ~MainWindow();
+
     void
     initOpen( QString fileName );
-    int
-    checkEstimator();
 
 private:
     /*GUI elements*/
-    QVBoxLayout*      mp_layout;
-    QTableWidget*     mp_sizeTable;
-    QTableWidget*     mp_groupTable;
-    QTableWidget*     mp_functionTable;
-    QStatusBar*       mp_statusBar;
-    QMenuBar*         mp_menu;
-    QList<QCheckBox*> m_groupBoxes;
-    QList<QCheckBox*> m_functionBoxes;
-    QProgressBar*     mp_progressbar;
+    QVBoxLayout*  mp_layout;
+    QTableWidget* mp_sizeTable;
+    QTableWidget* mp_groupTable;
+    QTableWidget* mp_functionTable;
+    QStatusBar*   mp_statusBar;
+    QMenuBar*     mp_menu;
+    QProgressBar* mp_progressbar;
 
     /*instance of Connector*/
     Connector* mp_connection;
@@ -80,16 +77,22 @@ private:
     /*functions*/
     void
     changeState();
+
     void
     fillSizeTable();
+
     void
-    update();
+    updateTables();
+
     void
     reset();
+
     QString
     seperate( int number );
+
     void
     initTables();
+
     void
     initMenu();
 
@@ -116,6 +119,8 @@ private slots:
     unselectGroupTable();
     void
     unselectFunctionTable();
+
+    /*for identical column sizes of the tables*/
     void
     resizeFunctionTable( int index,
                          int oldSize,

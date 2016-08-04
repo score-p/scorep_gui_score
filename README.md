@@ -8,7 +8,7 @@ Building
 
 Building needs the following packages:
 
- - Qt 5.5
+ - Qt 4.8
  - [Cube] 4.3 writer library and 'cube-config' in `PATH`
 
 Running

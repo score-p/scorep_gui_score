@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>images/exit.png</file>
-        <file>images/openFile.png</file>
+        <file>images/open.png</file>
         <file>images/save.png</file>
+        <file>images/exit.png</file>
     </qresource>
 </RCC>

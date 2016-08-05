@@ -141,10 +141,10 @@ MainWindow::initMenu()
     actionSave->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_S ) );
     actionExit->setShortcut( QKeySequence( Qt::CTRL + Qt::Key_Q ) );
     actionSaveAs->setShortcut( QKeySequence( Qt::CTRL + Qt::SHIFT + Qt::Key_S ) );
-    actionOpen->setIcon( QIcon( ":/icons/images/exit.png" ) );
+    actionOpen->setIcon( QIcon( ":icons/images/open.png" ) );
     actionSave->setIcon( QIcon( ":icons/images/save.png" ) );
-    actionExit->setIcon( QIcon( ":icons/images/exit.png" ) );
     actionSaveAs->setIcon( QIcon( ":icons/images/save.png" ) );
+    actionExit->setIcon( QIcon( ":icons/images/exit.png" ) );
     QMenu* fileMenu = new QMenu( "File" );
     fileMenu->addAction( actionOpen );
     fileMenu->addAction( actionSave );
@@ -157,9 +157,9 @@ MainWindow::initMenu()
     mp_menu->addMenu( helpMenu );
     connect( actionOpen, SIGNAL( triggered( bool ) ), this, SLOT( openFile() ) );
     connect( actionSave, SIGNAL( triggered( bool ) ), this, SLOT( saveFile() ) );
+    connect( actionSaveAs, SIGNAL( triggered( bool ) ), this, SLOT( saveFileAs() ) );
     connect( actionExit, SIGNAL( triggered( bool ) ), this, SLOT( close() ) );
     connect( actionShortcuts, SIGNAL( triggered( bool ) ), this, SLOT( showShortcuts() ) );
-    connect( actionSaveAs, SIGNAL( triggered( bool ) ), this, SLOT( saveFileAs() ) );
 }
 
 MainWindow::~MainWindow()

@@ -16,7 +16,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = scorep-score-gui
 TEMPLATE = app
 # the dash separates the version from the package name
-VERSION = -2-dev
+VERSION = -2
 
 CONFIG += warn_on debug_and_release
 !win32:CONFIG += silent

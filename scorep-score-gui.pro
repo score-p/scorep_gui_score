@@ -37,6 +37,7 @@ HEADERS  += src/mainwindow.hpp \
             src/score/SCOREP_Score_Event.hpp \
             src/score/SCOREP_Score_Group.hpp \
             src/score/SCOREP_Score_Types.hpp \
+            src/score/SCOREP_Score_EventList.hpp \
             src/data.hpp
 
 CUBE_CONFIG = cube-config

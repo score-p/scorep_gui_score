@@ -10,6 +10,8 @@
  *
  */
 
+#include <limits>
+
 #include "mainwindow.hpp"
 
 MainWindow::MainWindow( QWidget* parent )
@@ -767,4 +769,26 @@ MainWindow::reset()
     fillSizeTable();
     mp_functionTable->clearContents();
     mp_progressbar->reset();
+}
+
+QString
+MainWindow::filterFile()
+{
+    return m_filterFileName;
+}
+
+QString
+MainWindow::totalMemory()
+{
+    if ( mp_connection )
+    {
+        dataCenter::sizes tempSizes = mp_connection->getSizes();
+        if ( tempSizes.totalMemory > std::numeric_limits<uint32_t>::max() )
+        {
+            return QString();
+        }
+        return mp_connection->getReadableByteNo( tempSizes.totalMemory );
+    }
+
+    return QString();
 }

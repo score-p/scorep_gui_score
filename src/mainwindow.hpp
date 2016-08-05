@@ -50,6 +50,12 @@ public:
     void
     initOpen( QString fileName );
 
+    QString
+    filterFile();
+
+    QString
+    totalMemory();
+
 private:
     /*GUI elements*/
     QVBoxLayout*  mp_layout;

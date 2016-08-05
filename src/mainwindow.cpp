@@ -32,7 +32,10 @@ MainWindow::MainWindow( QWidget* parent )
     mp_signalMapper = new QSignalMapper( this );
 
     /*init layout*/
-    mp_layout = new QVBoxLayout( this );
+    QWidget* window = new QWidget( this );
+    mp_layout = new QVBoxLayout( window );
+    setCentralWidget( window );
+
     m_noFilter << "MPI" << "ALL" << "OMP" << "SHMEM";
 
     /*init*/
@@ -56,10 +59,6 @@ MainWindow::MainWindow( QWidget* parent )
     setMenuBar( mp_menu );
     setStatusBar( mp_statusBar );
 
-    /*new QWidget to set Layout*/
-    QWidget* window = new QWidget();
-    window->setLayout( mp_layout );
-    setCentralWidget( window );
 
     /*do connections*/
     connect( mp_groupTable, SIGNAL( cellPressed( int, int ) ), this, SLOT( unselectFunctionTable() ) );

@@ -298,7 +298,7 @@ MainWindow::openFile()
         setWindowTitle( m_fileName + "[*] - " + m_windowTitle );
         mp_connection->start( fileName );
         mp_groupTable->selectRow( 0 );
-        update();
+        updateTables();
     }
 }
 
